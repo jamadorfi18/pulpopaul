@@ -1,14 +1,15 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy, orm
 from config import DevConfig
 
 app = Flask(__name__)
 app.config.from_object(DevConfig)
 db = SQLAlchemy(app)
 
-
 # TODO no idea how to put them in different file
+
 class Match(db.Model):
+
     id = db.Column(db.Integer(), primary_key=True)
     team_local_id = db.Column(db.Integer(), db.ForeignKey('team.id'), index=True)
     team_visitor_id = db.Column(db.Integer(), index=True)
@@ -20,8 +21,32 @@ class Match(db.Model):
         self.team_local_id = team_local.id
         self.team_visitor_id = team_visitor.id
 
+        self.init_on_query()
+
+    # http://docs.sqlalchemy.org/en/latest/orm/constructors.html
+    @orm.reconstructor
+    def init_on_query(self):
+        self._team_local = Team.query.get(self.team_local_id)
+        self._team_visitor = Team.query.get(self.team_visitor_id)
+
+    @property
+    def team_local(self):
+        return self._team_local
+
+    @team_local.setter
+    def set_team_local(self, value):
+        self._team_local = value
+
+    @property
+    def team_visitor(self):
+        return self._team_visitor
+
+    @team_visitor.setter
+    def set_team_visitor(self, value):
+        self._team_visitor = value
+
     def __repr__(self):
-        return "<Match {} vs {}>".format(self.team_local_id, self.team_visitor_id)
+        return "<Match {} vs {}>".format(self.team_local.name, self.team_visitor.name)
 
 class Team(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
@@ -74,9 +99,9 @@ def get_teams():
 @app.route("/matches")
 def get_matches():
     def matches_to_list(html, match):
-        return html + '<li><strong><a href="/team/{}">{}</a></strong> vs <strong>{}</strong></li>'.format(
-            match.team_local_id,
-            match.team.name, match.team_visitor_id)
+        return html + '<li><strong><a href="/team/{}">{}</a></strong> vs <strong><a href="/team/{}">{}</a></strong></li>'.format(
+            match.team_local.id, match.team_local.name,
+            match.team_visitor.id, match.team_visitor.name)
 
     return '<ul>{}</ul>'.format(
         reduce(matches_to_list, Match.query.all(), '')
@@ -84,7 +109,7 @@ def get_matches():
 
 @app.route('/team/<id>')
 def team_detail(id):
-    return '<h1>{}</h1>'.format(Match.query.get(id=id).name)
+    return '<h1>{}</h1>'.format(Team.query.get(id).name)
 
 @app.route("/")
 def hello():
