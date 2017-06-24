@@ -1,6 +1,6 @@
 from flask_script import Manager, Server
-from main import app
-from models import db, Match, Team
+from pulpopaul import app
+from pulpopaul.models import db, Match, Team
 
 manager = Manager(app)
 
