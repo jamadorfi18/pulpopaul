@@ -1,5 +1,6 @@
 from flask_script import Manager, Server
-from main import app, db, Match, Team
+from main import app
+from models import db, Match, Team
 
 manager = Manager(app)
 
