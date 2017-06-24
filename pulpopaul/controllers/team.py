@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint
 # TODO do not use db
-from models import Team, db
+from pulpopaul.models import Team, db
 
 team_blueprint = Blueprint('team', __name__)
 
