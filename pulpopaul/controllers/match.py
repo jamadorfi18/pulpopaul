@@ -1,6 +1,6 @@
 from flask import Blueprint
 # TODO abstract team inside match where is convenient
-from models import Match, Team
+from pulpopaul.models import Match, Team
 
 match_blueprint = Blueprint('match', __name__)
 
