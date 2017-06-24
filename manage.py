@@ -1,8 +1,14 @@
+import os
 from flask_script import Manager, Server
-from pulpopaul import app
+from pulpopaul import create_app
 from pulpopaul.models import db, Match, Team
 
+# default to dev config
+env = os.environ.get('WEBAPP_ENV', 'dev')
+app = create_app('pulpopaul.config.%sConfig' % env.capitalize())
+
 manager = Manager(app)
+
 
 # Commands
 manager.add_command("server", Server())
