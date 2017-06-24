@@ -6,4 +6,5 @@ class ProdConfig(Config):
 
 class DevConfig(Config):
     debug = True
+    DEBUG=None
     SQLALCHEMY_DATABASE_URI = "sqlite:///pulpo.db"
