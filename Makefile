@@ -13,7 +13,6 @@ venv: activate
 work: activate
 
 clean:
-	find pulpopaul . -name "*~" -delete
-	find pulpopaul . -name "*pyc" -delete
+	find pulpopaul . -name "*~" -o -name "*pyc" -delete
 
 .PHONY: server install activate venv work clean
