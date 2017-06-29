@@ -15,4 +15,7 @@ work: activate
 clean:
 	find pulpopaul . -name "*~" -o -name "*pyc" -delete
 
+deploy:
+	git push openshift master
+
 .PHONY: server install activate venv work clean
