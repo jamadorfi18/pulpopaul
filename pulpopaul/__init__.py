@@ -5,6 +5,10 @@ from models import db
 from controllers.team import team_blueprint
 from controllers.match import match_blueprint
 from config import DevConfig
+from .extensions import (
+    rest_api
+)
+from .controllers.rest.team import TeamApi
 
 def create_app(object_name):
     # init app
@@ -12,9 +16,17 @@ def create_app(object_name):
     app.config.from_object(object_name)
     db.init_app(app)
 
-    # register controller
+    # register controllers
     app.register_blueprint(team_blueprint)
     app.register_blueprint(match_blueprint)
+
+    # register REST controllers
+    rest_api.add_resource(
+        TeamApi,
+        '/api/team',
+        '/api/team/<int:team_id>',
+    )
+    rest_api.init_app(app)
 
     # redirect to default view
     @app.route("/")
