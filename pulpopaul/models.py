@@ -7,10 +7,6 @@ class Model:
         db.session.add(self)
         db.session.commit()
 
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-
 class Match(db.Model, Model):
 
     id = db.Column(db.Integer(), primary_key=True)
