@@ -11,6 +11,26 @@ class Model:
         db.session.delete(self)
         db.session.commit()
 
+class Tournament(db.Model, Model):
+    """
+    Tournament model
+    """
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String())
+    short_name = db.Column(db.String())
+    start_date = db.Column(db.DateTime())
+    end_date = db.Column(db.DateTime())
+
+    def __init__(self, name, start_date, end_date, short_name=None):
+        self.name = name
+        self.short_name = short_name
+        self.start_date = start_date
+        self.end_date = end_date
+
+    def __repr__(self):
+        return "<Tournament '{}'>".format(self.name)
+
+
 class Match(db.Model, Model):
 
     id = db.Column(db.Integer(), primary_key=True)

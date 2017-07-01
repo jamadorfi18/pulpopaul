@@ -1,7 +1,7 @@
 import os
 from flask_script import Manager, Server
 from pulpopaul import create_app
-from pulpopaul.models import db, Match, Team
+from pulpopaul.models import db, Match, Team, Tournament
 
 # default to dev config
 env = os.environ.get('WEBAPP_ENV', 'dev')
@@ -15,11 +15,7 @@ manager.add_command("server", Server())
 
 @manager.shell
 def make_shell_context():
-    return dict(app=app)
-
-@manager.shell
-def make_shell_context():
-    return dict(app=app, db=db, Match=Match, Team=Team)
+    return dict(app=app, db=db, Match=Match, Team=Team, Tournament=Tournament)
 
 if __name__ == "__main__":
     manager.run()

@@ -8,7 +8,8 @@ from config import DevConfig
 from .extensions import (
     rest_api
 )
-from .controllers.rest.team import TeamApi
+from .controllers.rest import TeamApi, TournamentResource
+
 
 def create_app(object_name):
     # init app
@@ -25,6 +26,11 @@ def create_app(object_name):
         TeamApi,
         '/api/team',
         '/api/team/<int:team_id>',
+    )
+    rest_api.add_resource(
+        TournamentResource,
+        '/api/tournament',
+        '/api/tournament/<int:tournament_id>'
     )
     rest_api.init_app(app)
 
