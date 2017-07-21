@@ -4,18 +4,16 @@ from pulpopaul import create_app
 from pulpopaul.models import db, Match, Team, Tournament
 
 # default to dev config
-env = os.environ.get('WEBAPP_ENV', 'dev')
-app = create_app('pulpopaul.config.%sConfig' % env.capitalize())
-
-manager = Manager(app)
-
+ENV = os.environ.get('WEBAPP_ENV', 'dev')
+APP = create_app('pulpopaul.config.%sConfig' % ENV.capitalize())
+MANAGER = Manager(APP)
 
 # Commands
-manager.add_command("server", Server())
+MANAGER.add_command("server", Server(use_reloader=True))
 
-@manager.shell
+@MANAGER.shell
 def make_shell_context():
-    return dict(app=app, db=db, Match=Match, Team=Team, Tournament=Tournament)
+    return dict(app=APP, db=db, Match=Match, Team=Team, Tournament=Tournament)
 
 if __name__ == "__main__":
-    manager.run()
+    MANAGER.run()
